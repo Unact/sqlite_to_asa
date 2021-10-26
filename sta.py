@@ -3,8 +3,10 @@ import sqlanydb
 from tendo import singleton
 import os
 import logging
-
-os.environ["SQLANY_API_DLL"] = "/Applications/SQLAnywhere16/System/lib64/libdbcapi_r.dylib"
+#mac:
+#os.environ["SQLANY_API_DLL"] = "/Applications/SQLAnywhere16/System/lib64/libdbcapi_r.dylib"
+#ubuntu:
+os.environ["SQLANY_API_DLL"] = "/opt/sqlanywhere16/lib64/libdbcapi_r.so"
 adm_name = 'adm00'
 db_path = '/opt/admdata/'+adm_name+'/'
 asa_db_pwd_file = '/opt/admdata/sta.pwd'
