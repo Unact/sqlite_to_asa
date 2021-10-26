@@ -1,8 +1,15 @@
+# ubuntu setup:
+# apt install python3
+# apt install python3-pip
+# pip install sqlanydb
+# pip install tendo
+#
 import sqlite3
 import sqlanydb
 from tendo import singleton
 import os
 import logging
+import datetime
 #mac:
 #os.environ["SQLANY_API_DLL"] = "/Applications/SQLAnywhere16/System/lib64/libdbcapi_r.dylib"
 #ubuntu:
@@ -64,6 +71,7 @@ def sync_Table(dbname, table_name, row_names, row_count):
     con_asa.commit()
     logging.warning('--- end sync_Table(' + dbname + ', ' + table_name + ', ' + row_names + ', ' + str(row_count) + ') ---')
 
+logging.warning(datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")+' Started')
 me = singleton.SingleInstance() # will sys.exit(-1) if other instance is running
 
 f = open(asa_db_pwd_file, "r")
@@ -91,5 +99,6 @@ sync_Table(WorkingInfoTable_path,'workinginfotable', 'cashCount, clientsCount, o
             'loadingDateTime, physicalBagNumber, logicalBagNumber, openedOperationCycle, sessionNumber, operationId, '
             'workMode, errorText, serviceMode', 13)
 con_asa.commit()
+logging.warning(datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")+' Finished')
 
 
