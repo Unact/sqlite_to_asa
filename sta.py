@@ -63,8 +63,6 @@ def sync_Table(dbname, table_name, row_names, row_count):
 
 me = singleton.SingleInstance() # will sys.exit(-1) if other instance is running
 
-#con_sqlite = sqlite3.connect('/Users/shelter/temp/adm/Bag.db')
-#sql_fetch(con_sqlite)
 f = open(asa_db_pwd_file, "r")
 from_file_pwd = ''
 from_file_pwd = f.readline().replace('\n', '')
