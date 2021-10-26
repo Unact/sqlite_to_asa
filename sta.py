@@ -5,10 +5,11 @@ import os
 import logging
 
 os.environ["SQLANY_API_DLL"] = "/Applications/SQLAnywhere16/System/lib64/libdbcapi_r.dylib"
-logging.basicConfig(level=logging.INFO)
 adm_name = 'adm00'
-db_path = '/Users/shelter/temp/adm/'
-asa_db_pwd_file = '/Users/shelter/temp/adm/sta.pwd'
+db_path = '/opt/admdata/'+adm_name+'/'
+asa_db_pwd_file = '/opt/admdata/sta.pwd'
+
+logging.basicConfig(filename='/opt/admdata/sta_'+adm_name+'.log', level=logging.INFO)
 
 bagTable_path = db_path+'Bag.db'
 clientsTable_path = db_path+'Clients.db'
