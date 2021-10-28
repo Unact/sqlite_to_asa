@@ -90,7 +90,7 @@ sync_Table(PrinterTable_path, 'printertable', 'deviceType, deviceModel, state, e
 sync_Table(ReceiverTable_path, 'receivertable', 'deviceType, deviceModel, state, errorNumber, description', 5)
 sync_Table(SensorTable_path, 'sensortable', 'deviceType, deviceModel, state, errorNumber, description', 5)
 sync_Table(SessionRatingTable_path, 'sessionratingtable', 'rating, literalCode, [count]', 3)
-sync_Table(TransactionTable_path, 'transaсtiontable', 'sessionId, sessionNumber, operationId, sessionOpenDateTime,'
+sync_Table(TransactionTable_path, 'transactiontable', 'sessionId, sessionNumber, operationId, sessionOpenDateTime,'
           'operationName, cycleId, cashierId, cashierFullName, client, contractNumber, accountNumber, accountName,'
           'paymentSymbolCode, paymentSymbolName, paymentId, rating, amount, currencyCode, reasonFail, state', 20)
 sync_Table(UpsTable_path,'upstable', 'deviceType, deviceModel, state, errorNumber, description', 5)
