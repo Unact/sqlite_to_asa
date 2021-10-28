@@ -55,9 +55,14 @@ def sync_Table(dbname, table_name, row_names, row_count):
     logging.info('device_id='+str(device_id))
     con_sqlite = sqlite3.connect(dbname)
     cur_sqlite = con_sqlite.cursor()
-    sql = ('select '+row_names+', '
-           +str(device_id[0])+', id, timestamp from '+table_name
-           +' where id>'+str(i[0]))
+    if table_name == 'transactiontable':
+        sql = ('select '+row_names+', '
+               +str(device_id[0])+', id, timestamp from '+'transaсtiontable'
+               +' where id>'+str(i[0]))
+    else:
+        sql = ('select '+row_names+', '
+               +str(device_id[0])+', id, timestamp from '+table_name
+               +' where id>'+str(i[0]))
     logging.info(sql)
     cur_sqlite.execute(sql)
     rows = cur_sqlite.fetchall()
