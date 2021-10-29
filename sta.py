@@ -72,8 +72,8 @@ def sync_Table(dbname, table_name, row_names, row_count):
     cur_sqlite.execute(sql)
     rows = cur_sqlite.fetchall()
     for row in rows:
-        sql = ('merge into adm.'+table_name+'('+row_names+', device, id, ts) '
-               'using(select '+row_q+') as a('+row_names+', device, id, ts) '
+        sql = ('merge into adm.'+table_name+'('+row_names+', device, id, timestamp_sqlite) '
+               'using(select '+row_q+') as a('+row_names+', device, id, timestamp_sqlite) '
                'on (adm.'+table_name+'.id = a.id) '
                'when not matched then insert '
                'when matched then update')
