@@ -10,15 +10,21 @@ from tendo import singleton
 import os
 import logging
 import datetime
-#mac:
-#os.environ["SQLANY_API_DLL"] = "/Applications/SQLAnywhere16/System/lib64/libdbcapi_r.dylib"
-#ubuntu:
+#debug(mac):
+# os.environ["SQLANY_API_DLL"] = "/Applications/SQLAnywhere16/System/lib64/libdbcapi_r.dylib"
+# adm_name = 'adm00'
+# db_path = '/Users/shelter/temp/adm/'
+# asa_db_pwd_file = '/Users/shelter/temp/adm/sta.pwd'
+# logfilename = '/Users/shelter/temp/adm/sta_'+adm_name+'.log'
+# logging.basicConfig(level=logging.INFO)
+
+#production(ubuntu):
 os.environ["SQLANY_API_DLL"] = "/opt/sqlanywhere16/lib64/libdbcapi_r.so"
-adm_name = 'adm00'
 db_path = '/opt/admdata/'+adm_name+'/'
 asa_db_pwd_file = '/opt/admdata/sta.pwd'
-
-logging.basicConfig(filename='/opt/admdata/sta_'+adm_name+'.log', level=logging.INFO)
+logfilename = '/opt/admdata/sta_'+adm_name+'.log'
+logging.basicConfig(filename=logfilename, level=logging.INFO)
+merge_period = 14#days
 
 bagTable_path = db_path+'Bag.db'
 clientsTable_path = db_path+'Clients.db'
@@ -46,10 +52,6 @@ def sync_Table(dbname, table_name, row_names, row_count):
       _row_q = _row_q+'?,'
     row_q = _row_q + ' ?, ?, ?'
     cur_asa = con_asa.cursor()
-    sql = 'select isnull(max(id),-1) from adm.'+table_name+';'
-    cur_asa.execute(sql)
-    i = cur_asa.fetchone()
-    logging.info('max(id)='+str(i))
     cur_asa.execute('select id from adm.device where name = ?;', (adm_name,))
     device_id = cur_asa.fetchone()
     logging.info('device_id='+str(device_id))
@@ -58,17 +60,22 @@ def sync_Table(dbname, table_name, row_names, row_count):
     if table_name == 'transactiontable':
         sql = ('select '+row_names+', '
                +str(device_id[0])+', id, timestamp from '+'transaсtiontable'
-               +' where id>'+str(i[0]))
+               +' where cast(strftime("%s", timestamp) as int) > '
+               +'cast(strftime("%s", DateTime("Now", "LocalTime", "-'+str(merge_period)+' Day")) as int)')
     else:
         sql = ('select '+row_names+', '
                +str(device_id[0])+', id, timestamp from '+table_name
-               +' where id>'+str(i[0]))
+               +' where cast(strftime("%s", timestamp) as int) > '
+               +'cast(strftime("%s", DateTime("Now", "LocalTime", "-'+str(merge_period)+' Day")) as int)')
     logging.info(sql)
     cur_sqlite.execute(sql)
     rows = cur_sqlite.fetchall()
     for row in rows:
-        sql = ('insert into adm.'+table_name+'('+row_names+', device, id, ts) '
-               'values('+row_q+')')
+        sql = ('merge into adm.'+table_name+'('+row_names+', device, id, ts) '
+               'using(select '+row_q+') as a('+row_names+', device, id, ts) '
+               'on (adm.'+table_name+'.id = a.id) '
+               'when not matched then insert '
+               'when matched then update')
         logging.info(sql)
 
         cur_asa.execute(sql, row)
