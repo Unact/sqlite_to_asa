@@ -20,6 +20,7 @@ import datetime
 
 #production(ubuntu):
 os.environ["SQLANY_API_DLL"] = "/opt/sqlanywhere16/lib64/libdbcapi_r.so"
+adm_name = 'adm00'
 db_path = '/opt/admdata/'+adm_name+'/'
 asa_db_pwd_file = '/opt/admdata/sta.pwd'
 logfilename = '/opt/admdata/sta_'+adm_name+'.log'
